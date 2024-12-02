@@ -7,12 +7,13 @@
 </head>
 <body>
 
-    <h1>File Reader</h1>
+    <h1>Contador de palavras de Textos</h1>
     
     <form id="form">
-        <input type="file" id="file" name="file" placeholder="Escolher Arquivo">
+        <input type="file" id="file" name="file" accept=".txt" placeholder="Escolher Arquivo">
         <button type="submit">Submit</button>
     </form>
+    <div id="output"></div>
     <div id="result">
     </div>
 </body>
@@ -23,21 +24,32 @@
 
     form.addEventListener('submit', (e) => {
         e.preventDefault()
-        const formData = new FormData(e.target)
-        const data = Object.fromEntries(formData.entries())
+     
+        var arquivo = document.querySelector('#file')
+        var file =  arquivo.files[0]
+
+       var reader = new FileReader()
+        
+       reader.onload = (e) => {
+        var fileData = e.target.result
+
+document.querySelector('#output').textContent = fileData
 
         fetch('/fileReader', {
             method: 'POST',
             headers: {
                 'Content-Type' : 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({file: fileData})
         })
         .then(response => response.json())
         .then(res => {
             result.innerHTML = res.message
         })
 
+
+    }
+    reader.readAsText(file)
     })
 
 
