@@ -6,3 +6,4 @@ email varchar(100) primary key,
 age varchar(3)
 );
 
+select * from users;
