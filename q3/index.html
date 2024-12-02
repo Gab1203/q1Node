@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Par ou Impar</title>
+</head>
+<body>
+    
+<form id="input">
+    <input type="number" name="num" id="num" placeholder="Digite um número">
+    <button type="submit">Verificar</button>
+</form>
+
+<div id="result"></div>
+
+</body>
+<script>
+    var form = document.querySelector('#input')
+    var result = document.querySelector('#result')
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        var num = document.querySelector('#num').value
+
+        fetch('/parOuImpar', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({num: num})
+        })
+        .then(response => response.json())
+        .then(res => {
+            result.innerHTML = res.message
+        })
+    })
+</script>
+</html>
