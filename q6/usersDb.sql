@@ -1,9 +1,13 @@
 create database if not exists usersDb;
 use usersDb;
 
-create table users(
-email varchar(100) primary key,
-age varchar(3)
+create table tasks(
+id int auto_increment primary key,
+email varchar(150) not null,
+descricao text not null
 );
 
-select * from users;
+
+select * from tasks;
+
+UPDATE tasks SET email = 'lucas@gmail', descricao = 'OI TUDO BEM' WHERE id = 1;
