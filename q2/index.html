@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora IMC</title>
+</head>
+<body>
+
+    <h1>Calculadora IMC</h1>
+    <form id="calculator">
+        <input type="number" step="any" placeholder="Seu peso" id="weight" name="weight" required>
+        <input type="number" step="any" placeholder="Sua altura" id="height" name="height" required>
+        <button type="submit">Calcular IMC</button>
+        <div id="result">
+        </div>
+        </form>
+        <figure>
+            <img src="https://drpaulopittelli.com.br/wp-content/uploads/2017/11/175-x-175-3.png" alt="Tabela IMC">
+            <figcaption>Tabela IMC</figcaption>
+        </figure>
+    
+</body>
+<script>
+    var form = document.querySelector('#calculator')
+    var result = document.querySelector('#result')
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        const data = Object.fromEntries(formData.entries())
+
+        fetch('/imc', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(res => {
+            result.innerHTML = res.message
+        })
+    })
+</script>
+</html>
