@@ -12,9 +12,9 @@
 </h1>
 
 <form id="calculator">
-<input type="number" placeholder="Nota 1" id="n1" required>
-<input type="number" placeholder="Nota 2" id="n2" required>
-<input type="number" placeholder="Nota 3" id="n3" required>
+<input type="number" placeholder="Nota 1" id="n1" name="n1" required>
+<input type="number" placeholder="Nota 2" id="n2" name="n2" required>
+<input type="number" placeholder="Nota 3" id="n3" name="n3" required>
 <button type="submit">Calcular</button>
 <div id="result">
 </div>
@@ -25,10 +25,24 @@
 <script>
 
     var form = document.querySelector('#calculator')
+    var result = document.querySelector('#result')
 
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        const data = Object.fromEntries(formData.entries())
 
-        
+        fetch('/avg', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(res => {
+            result.innerHTML = res.message
+        })
     })
 
 </script>
