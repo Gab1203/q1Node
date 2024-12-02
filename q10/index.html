@@ -3,9 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Agenda de Contatos</title>
 </head>
 <body>
+    <h1>Contatos Cadastrados</h1>
+
+    <form id="formRegister">
+        <input type="text"  placeholder="Digite seu nome" name="nome" id="nome" required>
+        <input type="email"  placeholder="Digite o seu email" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" name="email" id="email" required>
+        <input type="tel"  placeholder="Digite seu número de telefone" name="telefone" id="telefone" required>
+        <button type="submit">Cadastrar</button>
+    </form>
+
+
+    <table border="1">
+<thead>
+   <tr>
+    <th>ID</th>
+    <th>Nome</th>
+    <th>Email</th>
+    <th>Telefone</th>
+    <th>Ações</th>
+    
+   </tr>
+</thead>
+<tbody id="cttsList"></tbody>
+    </table>
     
 </body>
+<script>
+
+
+    var form = document.querySelector('#formRegister')
+    var cttsList = document.querySelector('#cttsList')
+
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        const data = Object.fromEntries(formData.entries())
+
+        fetch('/addCtts', {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(data)})
+        .then(response => response.json())
+        .then(res => {
+            alert(res.message)
+            fetchData()
+        })
+
+        
+        
+    })
+
+    function fetchData(){
+        fetch('/getCtts')
+        .then(res => res.json())
+        .then(data => {
+            cttsList.innerHTML =''
+            data.forEach(row => {
+                cttsList.innerHTML += `
+                    <tr>
+                        <td contenteditable="false">${row.id}</td>
+                        <td contenteditable="true">${row.nome}</td>
+                        <td contenteditable="true">${row.email}</td>
+                        <td contenteditable="true">${row.telefone}</td>
+                        <td>
+                            <button onclick="deleteData(${row.id})">🗑️</button>
+                            <button onclick="updateData(${row.id})">✏️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+
+        })
+    }
+
+    function updateData(id){
+        const row = document.querySelector(`button[onclick="updateData(${id})"]`).parentNode.parentNode;
+        const nome = row.cells[1].textContent;
+        const email = row.cells[2].textContent;
+        const telefone = row.cells[3].textContent;
+        fetch(`/putCtts/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({nome: nome, email: email, telefone: telefone})
+
+        })
+        .then(response => response.json())
+        .then(res => {
+            alert(res.message)
+            fetchData()
+        })
+
+    }
+
+    function deleteData(id){
+
+        fetch(`/deleteCtts/${id}`, { method: 'DELETE', headers: {
+            'Content-Type' : 'application/json'
+        }})
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            fetchData();
+        });
+    }
+
+
+
+
+window.onload = fetchData();
+</script>
 </html>

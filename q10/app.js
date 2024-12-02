@@ -14,15 +14,15 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "Gab123",
-    database: "usersDb"
+    database: "agendaDb"
 });
 
 
-app.post('/addTasks', (req,res) => {
-    const {email, descricao} = req.body
-    dbQuery = 'INSERT INTO tasks (email, descricao) values (?,?)'
+app.post('/addCtts', (req,res) => {
+    const {nome, email, telefone} = req.body
+    dbQuery = 'INSERT INTO contatos (nome, email, telefone) values (?,?, ?)'
     
-    db.query(dbQuery, [email, descricao], (error, result) => {
+    db.query(dbQuery, [nome, email, telefone], (error, result) => {
         if(error){
             res.json({message: error.message})
         }
@@ -30,9 +30,9 @@ app.post('/addTasks', (req,res) => {
     })
 })
 
-app.get('/getTasks', (req,res) => {
+app.get('/getCtts', (req,res) => {
 
-    dbQuery = 'SELECT * FROM tasks'
+    dbQuery = 'select * from contatos'
     
     db.query(dbQuery, (error, result) => {
         if(error){
@@ -43,11 +43,11 @@ app.get('/getTasks', (req,res) => {
     })
 })
 
-app.delete('/deleteTasks/:id', (req,res) => {
+app.delete('/deleteCtts/:id', (req,res) => {
 
     const {id} = req.params
 
-    dbQuery = 'DELETE FROM tasks WHERE id = ?'
+    dbQuery = 'DELETE FROM contatos WHERE id = ?'
 
     db.query(dbQuery, [id], (error, result) => {
 
@@ -64,14 +64,14 @@ app.delete('/deleteTasks/:id', (req,res) => {
 
 })
 
-app.put('/putTasks/:id', (req,res) => {
+app.put('/putCtts/:id', (req,res) => {
 
     const {id} = req.params     
-    const {email, descricao} = req.body
+    const {nome, email, telefone} = req.body
 
-    dbQuery = 'UPDATE tasks SET email = ?, descricao = ? WHERE id = ?'
+    dbQuery = 'UPDATE contatos SET nome = ?, email = ?, telefone = ? WHERE id = ?'
 
-    db.query(dbQuery, [email, descricao, id], (error, result) => {
+    db.query(dbQuery, [nome, email, telefone, id], (error, result) => {
 
        
             if(error){
