@@ -3,9 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>File Reader</title>
 </head>
 <body>
+
+    <h1>File Reader</h1>
     
+    <form id="form">
+        <input type="file" id="file" name="file" placeholder="Escolher Arquivo">
+        <button type="submit">Submit</button>
+    </form>
+    <div id="result">
+    </div>
 </body>
+<script>
+
+    var form = document.querySelector('#form')
+    var result = document.querySelector('#result')
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        const data = Object.fromEntries(formData.entries())
+
+        fetch('/fileReader', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(res => {
+            result.innerHTML = res.message
+        })
+
+    })
+
+
+</script>
 </html>

@@ -8,6 +8,11 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
 
+app.post('/fileReader', (req,res) => {
+    const {file} = req.body
+
+
+})
 
 
 app.get('/', (req,res) => {
