@@ -9,10 +9,10 @@ app.use(bodyParser.json())
 
 
 app.post('/conversor', (req,res) => {
-    const {pre, pos , temp } = req.body
+    var {pre, pos , temp } = req.body
     temp = Number.parseFloat(temp)
-
-    var result = 0
+    
+    var result = 0.0
     if(pre == 'Celsius' && pos == 'Celsius'){
         result = temp
     }else if(pre == 'Celsius' && pos == 'Kelvin'){
@@ -34,7 +34,7 @@ app.post('/conversor', (req,res) => {
     }
 
 
-    res.json({message: `A temperatura em ${pos} equivalente a ${temp.toFixed([2])} em ${pre} é ${result.toFixed([2])}`})
+    res.json({message: `${temp.toFixed([2])} ${pre} equivale a ${result.toFixed([2])} ${pos}`})
 })
 
 app.get('/', (req,res) => {
