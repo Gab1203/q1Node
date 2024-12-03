@@ -3,9 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Calendar service</title>
 </head>
 <body>
     
+    <h1>Calendar service</h1>
+
+    <form id="dateForm">
+
+        <input type="date" id="date" name="date"  required>
+        <button type="submit">Descubra Agora</button>
+
+    </form>
+
+    <div id="dateChoice"></div>
+    <div id="result"></div>
 </body>
+<script>
+
+var dateForm = document.querySelector('#dateForm')
+var result = document.querySelector('#result')
+
+dateForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    var formData = new FormData(e.target)
+   var data = Object.fromEntries(formData.entries())
+var date = document.querySelector('#date').value
+
+document.querySelector('#dateChoice').innerHTML = date
+
+
+
+    fetch('/calendario', {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(res => {
+        result.innerHTML = res.message
+    })
+
+})
+
+</script>
 </html>
